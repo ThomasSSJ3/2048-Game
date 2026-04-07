@@ -28,19 +28,69 @@ public class Grid {
   }
 
   public void addRandomTile() {
-    int iRandom;
-    int jRandom;
+      if (!isFull()) {
+      int iRandom;
+      int jRandom;
 
-    do {
-      iRandom = random.nextInt(size);    
-      jRandom = random.nextInt(size);
-    } while (cells[iRandom][jRandom] != 0);
+      do {
+        iRandom = random.nextInt(size);    
+        jRandom = random.nextInt(size);
+      } while (cells[iRandom][jRandom] != 0);
 
-    if (random.nextInt(10) == 0) {
-      cells[iRandom][jRandom] = 4;
-    } else {
-      cells[iRandom][jRandom] = 2;
+      if (random.nextInt(10) == 0) {
+        cells[iRandom][jRandom] = 4;
+      } else {
+        cells[iRandom][jRandom] = 2;
+      }
     }
+  }
+
+  public boolean isFull() {
+    for (int i=0 ; i<size ; i++) {
+      for (int j=0 ; j<size ; j++) {
+        if (cells[i][j] == 0) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  public boolean isGameWon() {
+    for (int i=0 ; i<size ; i++) {
+      for (int j=0 ; j<size ; j++) {
+        if (cells[i][j] == 2048) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  public boolean isGameLost() {
+    return isFull() && !hasHorizontalMatch() && !hasVerticalMatch();
+  }
+
+  private boolean hasHorizontalMatch() {
+    for (int i=0 ; i<size ; i++) {
+      for (int j=0 ; j<size-1 ; j++) {
+        if (cells[i][j] == cells[i][j+1]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private boolean hasVerticalMatch() {
+    for (int i=0 ; i<size-1 ; i++) {
+      for (int j=0 ; j<size ; j++) {
+        if (cells[i][j] == cells[i+1][j]) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   public void move(Direction direction) {
@@ -67,7 +117,7 @@ public class Grid {
     for (int i=0 ; i<size ; i++) {
       for (int j=0 ; j<size ; j++) {
         int k = 0;
-        while ((i+k<size-1) && (cells[i+k][j] == 0)) {
+        while (((i+k)<size-1) && (cells[i+k][j] == 0)) {
           k++;
         }
         if (k != 0) {
@@ -82,7 +132,7 @@ public class Grid {
     for (int i=size-1 ; i>0 ; i--) {
       for (int j=0 ; j<size ; j++) {
         int k = 0;
-        while ((i-k<size-1) && (cells[i-k][j] == 0)) {
+        while ((k<i) && (cells[i-k][j] == 0)) {
           k++;
         }
         if (k != 0) {
@@ -97,7 +147,7 @@ public class Grid {
     for (int i=0 ; i<size ; i++) {
       for (int j=0 ; j<size ; j++) {
         int k = 0;
-        while ((j+k<size-1) && (cells[i][j+k] == 0)) {
+        while (((j+k)<size-1) && (cells[i][j+k] == 0)) {
           k++;
         }
         if (k != 0) {
@@ -124,7 +174,7 @@ public class Grid {
   }
 
   private void fusionUp() {
-    for (int i=0 ; i<size ; i++) {
+    for (int i=0 ; i<size-1 ; i++) {
       for (int j=0; j<size ; j++) {
         if ((cells[i][j] != 0) && (cells[i][j] == cells[i+1][j])) {
           cells[i][j] *= 2;
@@ -136,7 +186,7 @@ public class Grid {
   }
 
   private void fusionDown() {
-    for (int i=0 ; i<size ; i++) {
+    for (int i=size-1 ; i>0 ; i--) {
       for (int j=0; j<size ; j++) {
         if ((cells[i][j] != 0) && (cells[i][j] == cells[i-1][j])) {
           cells[i][j] *= 2;
@@ -149,7 +199,7 @@ public class Grid {
 
   private void fusionLeft() {
     for (int i=0 ; i<size ; i++) {
-      for (int j=0; j<size ; j++) {
+      for (int j=0; j<size-1 ; j++) {
         if ((cells[i][j] != 0) && (cells[i][j] == cells[i][j+1])) {
           cells[i][j] *= 2;
           cells[i][j+1] = 0;
