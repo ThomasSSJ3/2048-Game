@@ -1,10 +1,13 @@
-import java.util.logging.Logger;
+package com.game2048;
+
+import com.game2048.controller.GameController;
+import com.game2048.view.HeadlessView;
 
 public class Main {
-    private static final Logger logger = Logger.getLogger(Main.class.getName());
-
+    
     public static void main(String[] args) {
-        logger.info("Hello World!");
+        GameController game = new GameController(new HeadlessView(), 4);
+        game.startGame();
     }
 
 }
