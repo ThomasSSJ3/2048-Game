@@ -2,6 +2,8 @@ package com.game2048.view;
 
 import java.util.Scanner;
 
+import com.game2048.model.Direction;
+
 public class HeadlessView implements GameView {
 
   private Scanner clavier = new Scanner(System.in);
@@ -49,8 +51,22 @@ public class HeadlessView implements GameView {
   }
 
   @Override
-  public String getAction() {
-    System.out.print("Action (ZQSD) : ");
+  public Direction getDirection() {
+    String choice = getChoice();
+    if (("z".equals(choice)) || ("Z".equals(choice))) {
+      return Direction.UP;
+    } else if (("s".equals(choice)) || ("S".equals(choice))) {
+      return Direction.DOWN;
+    } else if (("q".equals(choice)) || ("Q".equals(choice))) {
+      return Direction.LEFT;
+    } else if (("d".equals(choice)) || ("D".equals(choice))) {
+      return Direction.RIGHT;
+    }
+    return null;
+  }
+
+  private String getChoice() {
+    System.out.print("[Action] Move (ZQSD) : ");
     return clavier.next();
   }
     

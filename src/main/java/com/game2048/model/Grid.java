@@ -68,29 +68,31 @@ public class Grid {
   }
 
   public boolean isGameLost() {
-    return isFull() && !hasHorizontalMatch() && !hasVerticalMatch();
+    return isFull() && !isMovePossible(Direction.UP) && !isMovePossible(Direction.DOWN) && !isMovePossible(Direction.LEFT) && !isMovePossible(Direction.RIGHT);
   }
 
-  private boolean hasHorizontalMatch() {
+  public boolean isMovePossible(Direction direction) {
+    int[][] tempCells = new int[size][size];
+    boolean isPossible = false;
     for (int i=0 ; i<size ; i++) {
-      for (int j=0 ; j<size-1 ; j++) {
-        if (cells[i][j] == cells[i][j+1]) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  private boolean hasVerticalMatch() {
-    for (int i=0 ; i<size-1 ; i++) {
       for (int j=0 ; j<size ; j++) {
-        if (cells[i][j] == cells[i+1][j]) {
-          return true;
+        System.arraycopy(cells[i], 0, tempCells[i], 0, size);
+      }
+    }
+    move(direction);
+    for (int i=0 ; i<size && !isPossible ; i++) {
+      for (int j=0 ; j<size && !isPossible ; j++) {
+        if (tempCells[i][j] != cells[i][j]) {
+          isPossible = true;
         }
       }
     }
-    return false;
+    for (int i=0 ; i<size ; i++) {
+      for (int j=0 ; j<size ; j++) {
+        System.arraycopy(tempCells[i], 0, cells[i], 0, size);
+      }
+    }
+    return isPossible;
   }
 
   public void move(Direction direction) {

@@ -1,5 +1,7 @@
 package com.game2048.view;
 
+import com.game2048.model.Direction;
+
 public interface GameView {
 
   void displayGame();
@@ -7,6 +9,6 @@ public interface GameView {
   void displayScore(int score);
   void displayWin();
   void displayLose();
-  String getAction();
+  Direction getDirection();
 
 }

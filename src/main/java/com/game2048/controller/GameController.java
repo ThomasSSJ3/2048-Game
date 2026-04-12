@@ -16,6 +16,7 @@ public class GameController {
   }
 
   public void startGame() {
+    Direction direction;
     view.displayGame();
     grid.addRandomTile();
     grid.addRandomTile();
@@ -29,11 +30,11 @@ public class GameController {
         isWon = true;
       }
 
-      String choice;
       do {
-        choice = view.getAction();
-      } while (!moveFromChoice(choice));
-
+        direction = view.getDirection();
+      } while ((direction == null) || !grid.isMovePossible(direction));
+      
+      grid.move(direction);
       grid.addRandomTile();
     }
 
@@ -41,24 +42,6 @@ public class GameController {
     view.displayGrid(grid.getCells(), grid.getSize());
     if (grid.isGameLost()) {
       view.displayLose();
-    }
-  }
-
-  private boolean moveFromChoice(String choice) {
-    if (("z".equals(choice)) || ("Z".equals(choice))) {
-      grid.move(Direction.UP);
-      return true;
-    } else if (("s".equals(choice)) || ("S".equals(choice))) {
-      grid.move(Direction.DOWN);
-      return true;
-    } else if (("q".equals(choice)) || ("Q".equals(choice))) {
-      grid.move(Direction.LEFT);
-      return true;
-    } else if (("d".equals(choice)) || ("D".equals(choice))) {
-      grid.move(Direction.RIGHT);
-      return true;
-    } else {
-      return false;
     }
   }
 
